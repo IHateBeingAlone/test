@@ -112,16 +112,18 @@
                 <form enctype="multipart/form-data" class="modal-form" action="ajax.php" method="POST">
                     <div class="modal-form__input-wrapper">
                         <label for="name">Имя</label>
-                        <input type="text" name="name" id="name" placeholder="Ваше имя">
+                        <input class="modal-form__input" type="text" name="name" id="name" placeholder="Ваше имя">
+                        <span class="modal-form__input-error">Поле не заполнено</span>
                     </div>
                     <div class="modal-form__input-wrapper -required">
                         <label for="phone">Телефон*</label>
-                        <input class="mask__phone" type="text" name="phone" id="phone" placeholder="Ваш телефон">
-                        <span class="modal-form__input-error">неккоректный номер телефона</span>
+                        <input class="modal-form__input mask__phone" type="text" name="phone" id="phone" placeholder="Ваш телефон">
+                        <span class="modal-form__input-error">Неккоректный номер телефона</span>
                     </div>
                     <div class="modal-form__input-wrapper">
                         <label for="message">Комментарий</label>
-                        <textarea name="message" id="message" placeholder="Ваш комментарий"></textarea>
+                        <textarea class="modal-form__input" name="message" id="message" placeholder="Ваш комментарий"></textarea>
+                        <span class="modal-form__input-error">Поле не заполнено</span>
                     </div>
                     <button class="modal-submit" type="submit">Оформить заказ</button>
                 </form>

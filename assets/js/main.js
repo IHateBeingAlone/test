@@ -113,43 +113,53 @@ function modalAjax() {
 
         const formData = new FormData(modalForm)
 
-        const nameValue = formData.get('name')
-        const phoneValue = formData.get('phone')
-        const messageValue = formData.get('message')
+        let formValid = true
 
-        modalForm.classList.remove('-error')
+        document.querySelectorAll('.modal-form__input-wrapper.-required').forEach((item) => {
+            item.classList.remove('-error')
+            if (!item.querySelector('.modal-form__input').value.length > 0) {
+                formValid = false
+                item.classList.add('-error')
+            }
+        })
 
-        if (isValidPhone(phoneValue.replace(/\W|_/g, ''))) {
-            const request = new XMLHttpRequest()
-        
-            const url = "ajax.php"
+        if (formValid) {
+            const nameValue = formData.get('name')
+            const phoneValue = formData.get('phone')
+            const messageValue = formData.get('message')
+    
+            if (isValidPhone(phoneValue.replace(/\W|_/g, ''))) {
+                const request = new XMLHttpRequest()
             
-            request.open("POST", url, true)
-            
-            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            
-            request.addEventListener("readystatechange", () => {
-                if(request.readyState === 4 && request.status === 200) {
-                    const data = JSON.parse(request.responseText)
-                    const debug = document.querySelector('.debug')
-                    debug.classList.add('-active')
-                    debug.querySelector('.debug__name').innerHTML = `Имя: ${data.name}`
-                    debug.querySelector('.debug__phone').innerHTML = `Телефон: ${data.phone}`
-                    debug.querySelector('.debug__message').innerHTML = `Комментарий: ${data.message}`
-                    debug.querySelector('.debug__item').innerHTML = `Товар: ${data.item}`
-                    debug.querySelector('.debug__url').innerHTML = `Адрес страницы: ${data.url}`
-                    debug.querySelector('.debug__ip').innerHTML = `IP адрес: ${data.ip}`
-
-                    modalForm.closest('.modal').classList.add('-success')
-                }
-            })
-
-            fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => {
-                const params = `name=${nameValue}&phone=${phoneValue}&message=${messageValue}&item=${modalForm.dataset.item}&url=${window.location.href}&ip=${data.ip}`
-                request.send(params)
-            });
-        } else {
-            modalForm.classList.add('-error')
+                const url = "ajax.php"
+                
+                request.open("POST", url, true)
+                
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                
+                request.addEventListener("readystatechange", () => {
+                    if(request.readyState === 4 && request.status === 200) {
+                        const data = JSON.parse(request.responseText)
+                        const debug = document.querySelector('.debug')
+                        debug.classList.add('-active')
+                        debug.querySelector('.debug__name').innerHTML = `Имя: ${data.name}`
+                        debug.querySelector('.debug__phone').innerHTML = `Телефон: ${data.phone}`
+                        debug.querySelector('.debug__message').innerHTML = `Комментарий: ${data.message}`
+                        debug.querySelector('.debug__item').innerHTML = `Товар: ${data.item}`
+                        debug.querySelector('.debug__url').innerHTML = `Адрес страницы: ${data.url}`
+                        debug.querySelector('.debug__ip').innerHTML = `IP адрес: ${data.ip}`
+    
+                        modalForm.closest('.modal').classList.add('-success')
+                    }
+                })
+    
+                fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => {
+                    const params = `name=${nameValue}&phone=${phoneValue}&message=${messageValue}&item=${modalForm.dataset.item}&url=${window.location.href}&ip=${data.ip}`
+                    request.send(params)
+                });
+            } else {
+                modalForm.querySelector('.modal-form__input.mask__phone').closest('.modal-form__input-wrapper').classList.add('-error')
+            }
         }
     })
 }
